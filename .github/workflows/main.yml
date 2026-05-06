@@ -1,0 +1,47 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Build binary
+        run: GOOS=linux GOARCH=amd64 go build -o gorest
+
+      - name: Upload binary to VPS
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 2223
+          source: "gorest"
+          target: "/home/dv200135/go-work/src/gorest/"
+          overwrite: true
+
+      - name: Restart App
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 2223
+          script: |
+            cd /home/dv200135/go-work/src/gorest
+
+            # kill proses lama
+            PID=$(pgrep -f gorest) && kill $PID || true
+            sleep 2
+
+            # start ulang
+            nohup ./gorest > out.log 2>&1 &
+            echo "App started"

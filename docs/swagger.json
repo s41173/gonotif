@@ -1,0 +1,3604 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/article": {
+            "post": {
+                "description": "Retrieve paginated list of articles filtered by category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Get list of articles",
+                "parameters": [
+                    {
+                        "description": "Filter and pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ArticleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of articles retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ArticleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/{permalink}": {
+            "get": {
+                "description": "Retrieve article detail by permalink",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Get article by permalink",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article permalink",
+                        "name": "permalink",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article detail retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ArticleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Article not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/article_category": {
+            "get": {
+                "description": "Retrieve all available news categories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "Get list of news categories",
+                "responses": {
+                    "200": {
+                        "description": "List of news categories retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.InterfaceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve all cart items with product details and total amount for authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get user cart",
+                "responses": {
+                    "200": {
+                        "description": "Cart retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CartResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add a product to cart with automatic shipping cost calculation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Add product to cart",
+                "parameters": [
+                    {
+                        "description": "Product ID and quantity",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product added to cart successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error or shipping cost calculation failed",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/clean": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove all items from authenticated user's cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Clean user cart",
+                "responses": {
+                    "200": {
+                        "description": "Cart cleaned successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/notes/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add or update notes for a specific cart item, empty string will set notes to null",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Set cart item notes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Notes data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CartNotesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notes updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/pickup/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Toggle pickup option for a specific cart item, if pickup is on then shipping cost will be removed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Toggle cart item pickup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pickup toggled successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/publish/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Toggle publish option for a specific cart item, if publish is on then will process when checkout",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Toggle cart item publish",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Publish toggled successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove a specific item from cart by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete cart item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart item deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_cart_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/chapter": {
+            "post": {
+                "description": "get all chapters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chapter"
+                ],
+                "summary": "Get chapters",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChapterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/chapter/{id}": {
+            "get": {
+                "description": "get chapter by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chapter"
+                ],
+                "summary": "Get chapter by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Chapter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChapterDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/chapter_front": {
+            "post": {
+                "description": "get chapters with pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chapter"
+                ],
+                "summary": "Get front chapters",
+                "parameters": [
+                    {
+                        "description": "Pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChapterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChapterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkout": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Process checkout and generate payment URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Checkout order",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CheckoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/city": {
+            "get": {
+                "description": "Retrieve list of all available cities",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "General"
+                ],
+                "summary": "Get all cities",
+                "responses": {
+                    "200": {
+                        "description": "List of cities retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.InterfaceResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/city_shipping/{province_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve list of cities based on province ID for shipping purpose",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get cities by province for shipping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province ID",
+                        "name": "province_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cities retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.InterfaceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/decode": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Decode JWT token and retrieve user session from Redis",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Decode user session",
+                "responses": {
+                    "200": {
+                        "description": "Success response with session data",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DecodeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid token / session expired)",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/district_shipping/{city_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve list of districts based on city ID for shipping purpose",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get districts by province for shipping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City ID",
+                        "name": "city_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of districts retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.InterfaceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/event": {
+            "post": {
+                "description": "Retrieve paginated list of events with chapter information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get list of events",
+                "parameters": [
+                    {
+                        "description": "Filter and pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of events retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/event/merchant": {
+            "post": {
+                "description": "Register a merchant to participate in a specific event",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Register as Event Merchant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "eventid",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Merchant Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Contact Person",
+                        "name": "cp",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address",
+                        "name": "address",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Phone Number",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Menu",
+                        "name": "menu",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Quantity",
+                        "name": "qty",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/event/public": {
+            "post": {
+                "description": "Register a public (non-authenticated) user as event participant",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Register as Public Participant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Event ID",
+                        "name": "eventid",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Full Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle Type (moto/car)",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Police Number",
+                        "name": "policeno",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Phone Number",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Notes",
+                        "name": "notes",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/event/register/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Register authenticated user as a participant for a specific event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Register as Event Participant",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "description": "Retrieve detail of a specific event by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get event detail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event detail retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Event not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_event_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/forgot": {
+            "post": {
+                "description": "Reset user password using OTP verification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Reset user password",
+                "parameters": [
+                    {
+                        "description": "Forgot password request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForgotRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LogoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized / invalid OTP",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/image": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload and update authenticated user profile image (max 1MB, image only)",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user profile image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image file (jpg, png, etc)",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UploadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid file or file too large",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/iswishlist/{product_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Check whether a product is in the authenticated user's wishlist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Check if product is wishlisted",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Wishlist status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.BoolResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product ID",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "authenticate user and return JWT token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "logout user and invalidate session (JWT \u0026 Redis)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/notif": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve list of notifications for authenticated user from notification service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user notifications",
+                "parameters": [
+                    {
+                        "description": "Pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotifRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of notifications retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.InterfaceResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/notif_detail/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve detail of a specific notification by ID from notification service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get notification detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notification ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification detail retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.InterfaceResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth": {
+            "post": {
+                "description": "Authenticate user using Google id_token from OAuth 2.0",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login with Google OAuth",
+                "parameters": [
+                    {
+                        "description": "Google id_token",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.OauthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or missing id_token",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Token verification failed",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve paginated list of orders for authenticated user with optional filters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get list of orders",
+                "parameters": [
+                    {
+                        "description": "Filter and pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.OrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of orders retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.InterfaceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order/tracking/{awb}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get tracking information from courier using AWB number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Track shipment by AWB",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Airway Bill (AWB) number",
+                        "name": "awb",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tracking data retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_order_dto.InterfaceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request / tracking failed",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized / session expired",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/{id}": {
+            "get": {
+                "description": "Get Order Detail \u0026 Items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get order by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OrderResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/otp": {
+            "post": {
+                "description": "send OTP to user for authentication",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Request OTP User",
+                "parameters": [
+                    {
+                        "description": "OTP request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReqOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LogoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/password": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Change password for authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change user password",
+                "parameters": [
+                    {
+                        "description": "Change password data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "description": "Retrieve paginated list of products with supplier information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get list of products",
+                "parameters": [
+                    {
+                        "description": "Filter and pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.IndexRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of products retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/refresh-cache": {
+            "post": {
+                "description": "Force refresh product cache from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Refresh product cache",
+                "responses": {
+                    "200": {
+                        "description": "Cache refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.SuccessResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/search": {
+            "post": {
+                "description": "Search products by name with autocomplete support from cache",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Search products by name",
+                "parameters": [
+                    {
+                        "description": "Search filter and limit data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.FilterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Search results retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{sku}": {
+            "get": {
+                "description": "Retrieve product detail by SKU",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get product by SKU",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product SKU",
+                        "name": "sku",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product detail retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product_city": {
+            "get": {
+                "description": "Retrieve distinct city list from active suppliers for product location filter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get list of cities for product filter",
+                "responses": {
+                    "200": {
+                        "description": "List of cities retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.InterfaceResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product_front/{type}": {
+            "get": {
+                "description": "Retrieve products for front page from cache, type 0 = latest, type 1 = best seller",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get front page products",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product type (0: latest, 1: best seller)",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of products retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid type",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/province_shipping": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve list of all available province for shipping",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get all province for shipping",
+                "responses": {
+                    "200": {
+                        "description": "List of province retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.InterfaceResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Register a new member account",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register new user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Chapter ID",
+                        "name": "cchapter",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Full Name",
+                        "name": "tname",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Address",
+                        "name": "taddress",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Zip Code",
+                        "name": "tzip",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Phone Number",
+                        "name": "tphone1",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "temail",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "City",
+                        "name": "ccity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password (min 6 characters)",
+                        "name": "tpassword",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date of Birth",
+                        "name": "tdob",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "NIK",
+                        "name": "tnik",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car Type",
+                        "name": "tcartype",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Police Number",
+                        "name": "tpoliceno",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Registration successful",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error or data already exists",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/set_shipping": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update shipping address for authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Set user shipping address",
+                "parameters": [
+                    {
+                        "description": "Shipping address data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ShippingForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shipping address updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/slider": {
+            "post": {
+                "description": "Retrieve paginated list of sliders and splash image from cache",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Slider"
+                ],
+                "summary": "Get list of sliders",
+                "parameters": [
+                    {
+                        "description": "Pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChapterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of sliders retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SliderResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/slider/refresh": {
+            "get": {
+                "description": "Force refresh slider and splash cache from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Slider"
+                ],
+                "summary": "Refresh slider cache",
+                "responses": {
+                    "200": {
+                        "description": "Slider cache refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.SuccessResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_chapter_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/update": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update authenticated user profile data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user profile",
+                "parameters": [
+                    {
+                        "description": "Update user data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve authenticated user data based on JWT token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get current user",
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DecodeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token or session expired",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify": {
+            "post": {
+                "description": "Verify user using OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify user account",
+                "parameters": [
+                    {
+                        "description": "Verify request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.VerifyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LogoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_auth_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/voucher": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get list of vouchers available for the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "Get available vouchers for user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.VoucherResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove voucher session that has been selected by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "Remove selected voucher",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/voucher/get": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get voucher that has been selected by the authenticated user from session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "Get selected voucher",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.VoucherValidateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/voucher/set/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Set voucher by ID for the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "Set voucher",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Voucher ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.VoucherValidateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_voucher_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve wallet points and transaction history for authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user wallet",
+                "parameters": [
+                    {
+                        "description": "Pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NotifRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Wallet data retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.WalletResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_user_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wishlist": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve paginated wishlist with product details for authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Get user wishlist",
+                "parameters": [
+                    {
+                        "description": "Pagination data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.WishlistRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Wishlist retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wishlist/{product_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add product to wishlist, if already wishlisted then remove it",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Toggle product wishlist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Wishlist updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product ID or already wishlisted",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/go-rest_internal_product_dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.ArticleRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "example": ""
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "dto.ArticleResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {}
+            }
+        },
+        "dto.CartNotesRequest": {
+            "type": "object",
+            "properties": {
+                "notes": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CartRequest": {
+            "type": "object",
+            "required": [
+                "product_id",
+                "qty"
+            ],
+            "properties": {
+                "product_id": {
+                    "type": "integer",
+                    "example": 94
+                },
+                "qty": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "dto.CartResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {},
+                "total": {
+                    "type": "number"
+                }
+            }
+        },
+        "dto.ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "new_password",
+                "username"
+            ],
+            "properties": {
+                "new_password": {
+                    "type": "string",
+                    "example": "n3wpassw0rd"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "dto.ChapterDetailResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "$ref": "#/definitions/model.Chapter"
+                }
+            }
+        },
+        "dto.ChapterRequest": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "dto.ChapterResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Chapter"
+                    }
+                }
+            }
+        },
+        "dto.CheckoutResponse": {
+            "type": "object",
+            "properties": {
+                "link_url": {
+                    "type": "string"
+                },
+                "order_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.DecodeResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "dto.EventRequest": {
+            "type": "object",
+            "required": [
+                "limit",
+                "offset"
+            ],
+            "properties": {
+                "chapter": {
+                    "type": "string",
+                    "example": ""
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "status": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "dto.EventResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {}
+            }
+        },
+        "dto.FilterRequest": {
+            "type": "object",
+            "required": [
+                "filter",
+                "limit"
+            ],
+            "properties": {
+                "filter": {
+                    "type": "string",
+                    "example": "kaos"
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                }
+            }
+        },
+        "dto.ForgotRequest": {
+            "type": "object",
+            "properties": {
+                "otp": {
+                    "type": "integer",
+                    "example": 1234
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "dto.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "example": "123456"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "dto.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LogoutResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.NotifRequest": {
+            "type": "object",
+            "required": [
+                "limit",
+                "offset"
+            ],
+            "properties": {
+                "limit": {
+                    "type": "string"
+                },
+                "offset": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.OauthRequest": {
+            "type": "object",
+            "required": [
+                "id_token"
+            ],
+            "properties": {
+                "id_token": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "dto.OrderRequest": {
+            "type": "object",
+            "properties": {
+                "confirm": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "end": {
+                    "type": "string",
+                    "example": "2026-05-30"
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "paid": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "start": {
+                    "type": "string",
+                    "example": "2026-04-01"
+                }
+            }
+        },
+        "dto.OrderResponse": {
+            "type": "object",
+            "properties": {
+                "imageurl": {
+                    "type": "string"
+                },
+                "items": {},
+                "result": {}
+            }
+        },
+        "dto.ProductResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {}
+            }
+        },
+        "dto.ReqOtpRequest": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "example": "0812345"
+                }
+            }
+        },
+        "dto.ShippingForm": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "city_name",
+                "district",
+                "district_name",
+                "province",
+                "province_name"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "city_name": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "district_name": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "province_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SliderResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {},
+                "splash": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "cartype",
+                "city",
+                "name",
+                "vehicleno",
+                "zip"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "Jalan Tomat No.123 AB"
+                },
+                "cartype": {
+                    "type": "string",
+                    "example": "W124 E320"
+                },
+                "city": {
+                    "type": "string",
+                    "example": "Medan"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Budi"
+                },
+                "vehicleno": {
+                    "type": "string",
+                    "example": "B 354 RR"
+                },
+                "zip": {
+                    "type": "string",
+                    "example": "20121"
+                }
+            }
+        },
+        "dto.UploadResponse": {
+            "type": "object",
+            "properties": {
+                "ext": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.VerifyRequest": {
+            "type": "object",
+            "properties": {
+                "otp": {
+                    "type": "integer",
+                    "example": 1234
+                },
+                "username": {
+                    "type": "string",
+                    "example": "0812345678"
+                }
+            }
+        },
+        "dto.VoucherResponse": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "result": {}
+            }
+        },
+        "dto.VoucherValidateResponse": {
+            "type": "object",
+            "properties": {
+                "discount": {
+                    "type": "number"
+                }
+            }
+        },
+        "dto.WalletResponse": {
+            "type": "object",
+            "properties": {
+                "result": {},
+                "total": {
+                    "type": "number"
+                }
+            }
+        },
+        "dto.WishlistRequest": {
+            "type": "object",
+            "required": [
+                "limit",
+                "offset"
+            ],
+            "properties": {
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "go-rest_internal_auth_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_cart_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_cart_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-rest_internal_chapter_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_chapter_dto.InterfaceResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "go-rest_internal_chapter_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-rest_internal_event_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_event_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-rest_internal_order_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_order_dto.InterfaceResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "go-rest_internal_product_dto.BoolResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "go-rest_internal_product_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_product_dto.IndexRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "example": ""
+                },
+                "condition": {
+                    "type": "string",
+                    "example": "new"
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "location": {
+                    "type": "string",
+                    "example": ""
+                },
+                "offset": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "order": {
+                    "type": "string",
+                    "example": "desc"
+                },
+                "orderby": {
+                    "type": "string",
+                    "example": "id"
+                }
+            }
+        },
+        "go-rest_internal_product_dto.InterfaceResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "go-rest_internal_product_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-rest_internal_user_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_user_dto.InterfaceResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "go-rest_internal_user_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-rest_internal_voucher_dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "invalid request"
+                }
+            }
+        },
+        "go-rest_internal_voucher_dto.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Chapter": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "bank1": {
+                    "type": "string"
+                },
+                "bank2": {
+                    "type": "string"
+                },
+                "bank3": {
+                    "type": "string"
+                },
+                "billing_contact": {
+                    "type": "string"
+                },
+                "chief": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created": {
+                    "description": "Pointer to allow null",
+                    "type": "string"
+                },
+                "deleted": {
+                    "description": "Pointer to allow null",
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "discount": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "instagram": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "monthly_fee": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parent": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "regist_fee": {
+                    "type": "number"
+                },
+                "treasurer": {
+                    "type": "string"
+                },
+                "updated": {
+                    "description": "Pointer to allow null",
+                    "type": "string"
+                },
+                "vice": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

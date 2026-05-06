@@ -94,7 +94,7 @@ func setupRouter() *gin.Engine {
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"service": "GO NOTIF API",
+			"service": "GO NOTIF API SERVICE",
 			"status":  "running",
 		})
 	})

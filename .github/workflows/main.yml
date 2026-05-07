@@ -25,10 +25,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           script_stop: false
-          script: |
-            pkill -f "/root/go/src/gonotif/gonotif" || true
-            sleep 2
-            echo "Done"
+          script: systemctl stop gonotif || true
 
       - name: Upload binary to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -48,7 +45,4 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
-          script: |
-            cd /root/go/src/gonotif
-            nohup ./gonotif > out.log 2>&1 &
-            echo "App started"
+          script: systemctl start gonotif

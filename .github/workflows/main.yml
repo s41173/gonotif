@@ -7,7 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -18,6 +17,17 @@ jobs:
       - name: Build binary
         run: GOOS=linux GOARCH=amd64 go build -o gonotif
 
+      - name: Kill running app
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 2222
+          script: |
+            PID=$(pgrep -f gonotif) && kill $PID || true
+            sleep 2
+
       - name: Upload binary to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -26,10 +36,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           source: "gonotif"
-          target: "/opt/gonotif/"
+          target: "/root/go/src/gonotif/"
           overwrite: true
 
-      - name: Restart Service
+      - name: Restart App
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -37,6 +47,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           script: |
-            systemctl daemon-reload
-            systemctl restart gonotif
-            systemctl status gonotif --no-pager
+            cd /root/go/src/gonotif
+            nohup ./gonotif > out.log 2>&1 &
+            echo "App started"

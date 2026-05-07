@@ -17,13 +17,13 @@ jobs:
       - name: Build binary
         run: GOOS=linux GOARCH=amd64 go build -o gonotif
 
-     - name: Kill running app
+      - name: Kill running app
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
+          port: 2222
           script_stop: false
           script: |
             pkill -f "/root/go/src/gonotif/gonotif" || true
@@ -42,7 +42,7 @@ jobs:
           overwrite: true
 
       - name: Restart App
-        uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}

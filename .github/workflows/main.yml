@@ -25,8 +25,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           script: |
-            PID=$(pgrep -f gonotif) && kill $PID || true
+            pkill -f gonotif || true
             sleep 2
+            echo "Done"
 
       - name: Upload binary to VPS
         uses: appleboy/scp-action@v0.1.7
